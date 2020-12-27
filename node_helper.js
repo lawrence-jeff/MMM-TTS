@@ -21,12 +21,22 @@ module.exports = NodeHelper.create({
         if (notification === 'CONFIG') {
             this.config = payload;
         } else if (notification === 'TTS') {
-            tts.speak(payload, this.config.voice, this.config.speed, (err) => {
-                if (err) {
-                    console.log(err);
-                }
-                this.sendSocketNotification('HIDE', {});
-            });
+            if (typeof payload === 'string') {
+                tts.speak(payload, this.config.voice, this.config.speed, (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    this.sendSocketNotification('HIDE', {});
+                });
+            }
+            else if (typeof payload === 'object') {
+                tts.speak(payload.text, this.config.voice, this.config.speed,  (err) => {
+                    if (err) {
+                        console.log(err);
+                    }
+                    this.sendSocketNotification('HIDE', {});
+                });
+            }
         }
     }
 });
